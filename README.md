@@ -1,4 +1,3 @@
-# webAPP
 # ☀️ Daylight – Sunrise and Sunset for Every Day
 
 A beautiful, clean, and fast web application to check solar phases—sunrise, sunset, day length, and solar noon—for any date and any location on Earth.
