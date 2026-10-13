@@ -1,42 +1,31 @@
-# ☀️ Daylight – Sunrise and Sunset for Every Day
+☀️ Продължителност на деня (Daylight)
 
-A beautiful, clean, and fast web application to check solar phases—sunrise, sunset, day length, and solar noon—for any date and any location on Earth.
+Красиво, изчистено и бързо уеб приложение за проверка на слънчевите фази – изгрев, залез, продължителност на деня и слънчев пладне – за всяка дата и всяка точка на Земята.
 
-🌐 **[View Live Demo](#)** [https://zhivkogenadiev.github.io/daylight/](https://zhivkogenadiev.github.io/daylight/)
+🌐 Демо на живо: https://ZhivkoGenadiev.github.io/daylight/
 
----
+✨ Основни характеристики
 
-## ✨ Key Features
+🚀 Изцяло клиентско (Client-side): Работи директно в браузъра без нужда от сървър, бази данни или външни API ключове.
 
-- **🚀 Fully Client-Side:** Runs entirely in the browser with no server, database, or external API keys required.
-- **🔭 Astronomical Precision:** Uses advanced NOAA solar equations to calculate:
-  - Exact sunrise and sunset times
-  - Solar noon
-  - First and last light (civil twilight at 6° below the horizon)
-  - Day length and comparison with the previous day
-  - Automatic detection of polar days and nights
-- **🌅 Interactive Sky Simulator:** Built-in time scrubber (slider) to track the sun's position and real-time sky color transitions throughout the day.
-- **📍 Flexible Location Selection:** 
-  - Pre-set major world cities
-  - Automatic browser geolocation (`Geolocation API`)
-  - Manual entry of geographic coordinates (latitude and longitude)
-- **📅 14-Day Forecast Panel:** A list showing solar data for the upcoming two weeks with visual day-length progress bars.
-- **🎨 Modern Design & Dark Mode:** Clean typography (*Fraunces* and *Instrument Sans*), seamlessly adapting to the system's dark/light color scheme.
+🔭 Астрономическа прецизност: Използва усъвършенствани слънчеви уравнения по модела на NOAA.
 
----
+🌅 Интерактивен симулатор на небето: Вграден плъзгач (slider) за проследяване на позицията на слънцето в реално време.
 
-## 🛠️ Tech Stack
+📍 Гъвкав избор на локация: Готови градове, геолокация или ръчно въвеждане на координати.
 
-- **HTML5 & CSS3** (Custom Properties, Flexbox, Grid, Media Queries)
-- **Vanilla JavaScript (ES6+)**
-- **SVG** (For dynamic rendering of the sun's arc and sky background)
-- **NOAA Solar Equations** (Astronomical algorithms for solar positioning)
+🚀 Стартиране и поддръжка
 
----
+Приложението е качено в GitHub Pages и може да бъде отворено директно през браузър на компютър или мобилно устройство от линка по-горе.
 
-## 🚀 How to Run Locally
+При промени по кода:
 
-The project is lightweight and contained within a single main file (`index.html`). No Node.js installation or package manager is required.
+Редактирайте файла index.html.
 
-1. Clone the repository or download the files:
-   ```bash
+Запазете промените (Commit).
+
+GitHub Pages автоматично ще обнови сайта до 1-2 минути.
+
+📄 Лиценз
+
+Този проект е с отворен код и се разпространява под лиценза MIT.
