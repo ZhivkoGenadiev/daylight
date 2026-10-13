@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daylight – sunrise and sunset for every day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#eef1f8;--panel:#ffffff;--ink:#1b1a33;--mute:#5d5b7d;--line:#d9dcec;--gold:#d98a1f;--dusk:#5a4bb0;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12112a;--panel:#1c1b3a;--ink:#ece9ff;--mute:#a09dc6;--line:#33315c;--gold:#f3b04f;--dusk:#9a8cf0}}
+:root[data-theme="dark"]{--bg:#12112a;--panel:#1c1b3a;--ink:#ece9ff;--mute:#a09dc6;--line:#33315c;--gold:#f3b04f;--dusk:#9a8cf0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans)}
+main{max-width:860px;margin:0 auto;padding:28px 18px 56px}
+h1{font:600 clamp(2rem,6vw,3rem)/1.05 var(--serif);margin:0 0 4px;letter-spacing:-.01em}
+h2{font:600 1.4rem/1.2 var(--serif);margin:36px 0 12px}
+.sub{color:var(--mute);margin:0 0 22px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+select,input,button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+button{cursor:pointer}
+button:hover{border-color:var(--dusk)}
+button.primary{background:var(--dusk);border-color:var(--dusk);color:#fff}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.date{display:flex;gap:6px;align-items:center}
+details{flex-basis:100%;color:var(--mute)}
+details summary{cursor:pointer}
+details div{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:end}
+details label{display:grid;gap:4px;font-size:.9rem}
+details input{width:140px}
+.sky{border-radius:22px;overflow:hidden;background:var(--panel);border:1px solid var(--line)}
+.sky svg{display:block;width:100%;height:auto}
+.scrub{padding:14px 18px 18px;display:grid;gap:6px}
+.scrub input[type=range]{padding:0;width:100%;accent-color:var(--gold);border:0;background:none}
+.read{color:var(--mute);font-size:.95rem}
+.msg{padding:56px 20px;text-align:center;font:400 1.3rem/1.4 var(--serif)}
+.times{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.big{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.big span{color:var(--mute);font-size:.95rem}
+.big b{display:block;font:400 clamp(2.6rem,11vw,4.4rem)/1 var(--serif);letter-spacing:-.02em;font-variant-numeric:lining-nums tabular-nums}
+.big.rise b{color:var(--gold)}
+.big.set b{color:var(--dusk)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:14px 0 0}
+.facts div{padding:12px 4px;border-top:2px solid var(--line)}
+.facts dt{color:var(--mute);font-size:.9rem}
+.facts dd{margin:2px 0 0;font:600 1.25rem var(--serif)}
+ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+ol button{width:100%;display:grid;grid-template-columns:96px 1fr 70px 70px 74px;gap:10px;align-items:center;text-align:left;padding:10px 14px;font-variant-numeric:tabular-nums}
+ol button[aria-current=true]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--dusk))}
+.hd{display:grid;grid-template-columns:96px 1fr 70px 70px 74px;gap:10px;padding:0 14px;color:var(--mute);font-size:.85rem;margin-bottom:6px}
+@media (max-width:620px){
+  .times{grid-template-columns:1fr}
+  ol button,.hd{grid-template-columns:70px 1fr 56px 56px}
+  ol button>:nth-child(5),.hd>:nth-child(5){display:none}
+}
+.note{color:var(--mute);font-size:.85rem;margin-top:28px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Daylight</h1>
+  <p class="sub" id="where">Sunrise and sunset for any day, anywhere.</p>
+
+  <div class="controls">
+    <select id="city" aria-label="Choose a city"></select>
+    <button id="geo" class="primary">Use my location</button>
+    <div class="date">
+      <button id="prev" aria-label="Previous day">‹</button>
+      <input type="date" id="date" aria-label="Date">
+      <button id="next" aria-label="Next day">›</button>
+      <button id="today">Today</button>
+    </div>
+    <details>
+      <summary>Enter coordinates</summary>
+      <div>
+        <label>Latitude<input id="lat" type="number" step="any" min="-90" max="90" placeholder="42.70"></label>
+        <label>Longitude<input id="lon" type="number" step="any" min="-180" max="180" placeholder="23.32"></label>
+        <button id="apply">Apply</button>
+      </div>
+    </details>
+  </div>
+
+  <section class="sky" aria-label="Path of the sun">
+    <div id="skybox"></div>
+    <div class="scrub" id="scrub">
+      <input type="range" id="time" aria-label="Time of day">
+      <div class="read" id="read"></div>
+    </div>
+  </section>
+
+  <section class="times" aria-live="polite">
+    <div class="big rise"><span>Sunrise</span><b id="rise">–</b></div>
+    <div class="big set"><span>Sunset</span><b id="set">–</b></div>
+  </section>
+
+  <dl class="facts">
+    <div><dt>Day length</dt><dd id="len">–</dd></div>
+    <div><dt>Compared to yesterday</dt><dd id="delta">–</dd></div>
+    <div><dt>Solar noon</dt><dd id="noon">–</dd></div>
+    <div><dt>First light</dt><dd id="dawn">–</dd></div>
+    <div><dt>Last light</dt><dd id="dusk">–</dd></div>
+  </dl>
+
+  <h2>Next 14 days</h2>
+  <div class="hd" aria-hidden="true"><span>Date</span><span>Daylight</span><span>Sunrise</span><span>Sunset</span><span>Length</span></div>
+  <ol id="list"></ol>
+
+  <p class="note">Times come from the NOAA solar equations and are accurate to within about a minute. They are shown in the selected place's time zone. First and last light mark when the sun is 6° below the horizon.</p>
+</main>
+
+<script>
+const R = Math.PI / 180;
+const CITIES = [
+  {name:"Sofia, Bulgaria", lat:42.6977, lon:23.3219, tz:"Europe/Sofia"},
+  {name:"London, UK", lat:51.5072, lon:-0.1276, tz:"Europe/London"},
+  {name:"New York, USA", lat:40.7128, lon:-74.006, tz:"America/New_York"},
+  {name:"São Paulo, Brazil", lat:-23.5505, lon:-46.6333, tz:"America/Sao_Paulo"},
+  {name:"Cairo, Egypt", lat:30.0444, lon:31.2357, tz:"Africa/Cairo"},
+  {name:"Tokyo, Japan", lat:35.6762, lon:139.6503, tz:"Asia/Tokyo"},
+  {name:"Sydney, Australia", lat:-33.8688, lon:151.2093, tz:"Australia/Sydney"},
+  {name:"Reykjavík, Iceland", lat:64.1466, lon:-21.9426, tz:"Atlantic/Reykjavik"}
+];
+const $ = id => document.getElementById(id);
+const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+let loc = CITIES[0], date = "", cur = null;
+
+try { const s = JSON.parse(localStorage.getItem("daylight-loc")); if (s && isFinite(s.lat) && isFinite(s.lon)) loc = s; } catch(e){}
+
+/* ---------- solar maths (NOAA / sunrise equation) ---------- */
+function sun(y, m, d, lat, lon, h) {
+  const n = Math.round(Date.UTC(y, m, d, 12) / 864e5 + 2440587.5 - 2451545 + 0.0008);
+  const Js = n - lon / 360;
+  const M = (357.5291 + 0.98560028 * Js) % 360;
+  const C = 1.9148 * Math.sin(M*R) + 0.02 * Math.sin(2*M*R) + 0.0003 * Math.sin(3*M*R);
+  const L = (M + C + 180 + 102.9372) % 360;
+  const Jt = 2451545 + Js + 0.0053 * Math.sin(M*R) - 0.0069 * Math.sin(2*L*R);
+  const sd = Math.sin(L*R) * Math.sin(23.4397*R), cd = Math.sqrt(1 - sd*sd);
+  const co = (Math.sin(h*R) - Math.sin(lat*R) * sd) / (Math.cos(lat*R) * cd);
+  const ms = J => (J - 2440587.5) * 864e5;
+  if (co > 1) return {noon: ms(Jt), polar: "night"};
+  if (co < -1) return {noon: ms(Jt), polar: "day"};
+  const w = Math.acos(co) / R;
+  return {noon: ms(Jt), rise: ms(Jt - w/360), set: ms(Jt + w/360)};
+}
+const parts = s => s.split("-").map(Number);
+function calc(ds) {
+  const [y, m, d] = parts(ds);
+  const a = sun(y, m-1, d, loc.lat, loc.lon, -0.833), b = sun(y, m-1, d, loc.lat, loc.lon, -6);
+  return {...a, dawn: b.rise, dusk: b.set};
+}
+function shift(ds, n) { const [y,m,d] = parts(ds); return new Date(Date.UTC(y, m-1, d + n)).toISOString().slice(0,10); }
+function todayIn(tz) { return new Intl.DateTimeFormat("en-CA", {timeZone: tz}).format(new Date()); }
+
+/* ---------- formatting ---------- */
+const tf = () => new Intl.DateTimeFormat([], {hour:"2-digit", minute:"2-digit", timeZone: loc.tz});
+const time = ms => ms == null || isNaN(ms) ? "–" : tf().format(new Date(ms));
+const dur = ms => { const m = Math.round(ms / 6e4); return Math.floor(m/60) + " h " + String(m%60).padStart(2,"0") + " min"; };
+function deltaTxt(sec) {
+  const s = Math.abs(Math.round(sec)), mm = Math.floor(s/60), ss = s%60;
+  if (s < 1) return "No change";
+  return (sec > 0 ? "+" : "−") + (mm ? mm + " min " : "") + ss + " s";
+}
+
+/* ---------- sky ---------- */
+const STOPS = [
+  [-0.2, "#0f1030", "#2a2358"], [0, "#3a3470", "#f2a65a"], [0.12, "#4f7fc8", "#ffd9a0"],
+  [0.5, "#2f6fc0", "#8cc3ee"], [0.88, "#4f6cb8", "#ffc58a"], [1, "#46306f", "#ee7b4d"], [1.2, "#0f1030", "#2a2358"]
+];
+const hex = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16));
+const mix = (a, b, t) => "rgb(" + hex(a).map((v, i) => Math.round(v + (hex(b)[i] - v) * t)).join(",") + ")";
+function skyAt(p) {
+  for (let i = 0; i < STOPS.length - 1; i++) {
+    const A = STOPS[i], B = STOPS[i+1];
+    if (p <= B[0]) { const t = (p - A[0]) / (B[0] - A[0]); return [mix(A[1], B[1], t), mix(A[2], B[2], t)]; }
+  }
+  return [STOPS.at(-1)[1], STOPS.at(-1)[2]];
+}
+const SVG = `<svg viewBox="0 0 600 300" role="img" aria-label="Arc showing the sun's path across the sky">
+<defs>
+ <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="s1" offset="0"/><stop id="s2" offset="1"/></linearGradient>
+ <radialGradient id="glow"><stop offset="0" stop-color="#fff3c4" stop-opacity=".95"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="600" height="300" fill="url(#sky)"/>
+<path d="M60 240 A240 200 0 0 1 540 240" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2" stroke-dasharray="3 7" stroke-linecap="round"/>
+<circle id="halo" r="46" fill="url(#glow)"/>
+<circle id="orb" r="15" fill="#ffe08a"/>
+<rect x="0" y="240" width="600" height="60" fill="#0c0b22" fill-opacity=".62"/>
+<line x1="0" y1="240" x2="600" y2="240" stroke="#fff" stroke-opacity=".6"/>
+<text id="tl" x="60" y="268" fill="#fff" text-anchor="middle" font-size="15" font-family="Fraunces,Georgia,serif"></text>
+<text id="tr" x="540" y="268" fill="#fff" text-anchor="middle" font-size="15" font-family="Fraunces,Georgia,serif"></text>
+</svg>`;
+
+function updateSky() {
+  const v = +$("time").value, span = cur.set - cur.rise;
+  const p = Math.max(-0.2, Math.min(1.2, (v - cur.rise) / span));
+  const x = 300 - 240 * Math.cos(Math.PI * p), y = 240 - 200 * Math.sin(Math.PI * p);
+  for (const id of ["orb", "halo"]) { $(id).setAttribute("cx", x); $(id).setAttribute("cy", y); }
+  const [a, b] = skyAt(p);
+  $("s1").setAttribute("stop-color", a); $("s2").setAttribute("stop-color", b);
+  $("halo").setAttribute("opacity", p < 0 || p > 1 ? 0.2 : 1);
+  $("read").textContent = time(v) + (p < 0 || p > 1 ? " · the sun is below the horizon" : " · the sun is up");
+}
+
+/* ---------- render ---------- */
+function render() {
+  cur = calc(date);
+  $("date").value = date;
+  $("where").textContent = loc.name + " · " + new Intl.DateTimeFormat([], {dateStyle:"full", timeZone:"UTC"}).format(new Date(date + "T12:00:00Z"));
+  const polar = cur.polar;
+  if (polar) {
+    $("skybox").innerHTML = '<div class="msg">' + (polar === "day" ? "The sun does not set on this day. It is polar day here." : "The sun does not rise on this day. It is polar night here.") + "</div>";
+    $("scrub").style.display = "none";
+    for (const id of ["rise","set","len","dawn","dusk"]) $(id).textContent = "–";
+    $("rise").textContent = $("set").textContent = polar === "day" ? "No sunset" : "No sunrise";
+    $("noon").textContent = time(cur.noon); $("delta").textContent = "–";
+  } else {
+    $("skybox").innerHTML = SVG;
+    $("tl").textContent = time(cur.rise); $("tr").textContent = time(cur.set);
+    $("scrub").style.display = "";
+    const sl = $("time"), lo = cur.rise - 90*6e4, hi = cur.set + 90*6e4;
+    sl.min = lo; sl.max = hi; sl.step = 6e4;
+    const now = Date.now();
+    sl.value = date === todayIn(loc.tz) && now >= lo && now <= hi ? now : cur.noon;
+    $("rise").textContent = time(cur.rise); $("set").textContent = time(cur.set);
+    const len = cur.set - cur.rise, prev = calc(shift(date, -1));
+    $("len").textContent = dur(len);
+    const prevLen = prev.polar ? 0 : (prev.set - prev.rise);
+    $("delta").textContent = !prev.polar ? deltaTxt((len - prevLen) / 1000) : "–";
+    $("noon").textContent = time(cur.noon);
+    $("dawn").textContent = time(cur.dawn); $("dusk").textContent = time(cur.dusk);
+    updateSky();
+  }
+  const list = $("list"); list.innerHTML = "";
+  for (let i = 0; i < 14; i++) {
+    const ds = shift(date, i), c = calc(ds), li = document.createElement("li"), b = document.createElement("button");
+    const label = new Intl.DateTimeFormat([], {weekday:"short", day:"numeric", month:"short", timeZone:"UTC"}).format(new Date(ds + "T12:00:00Z"));
+    const len = c.polar ? (c.polar === "day" ? 864e5 : 0) : c.set - c.rise;
+    b.setAttribute("aria-current", i === 0);
+    b.innerHTML = "<span>" + label + '</span><span class="bar"><i style="width:' + (len / 864e5 * 100).toFixed(1) + '%"></i></span><span>' +
+      (c.polar ? "–" : time(c.rise)) + "</span><span>" + (c.polar ? "–" : time(c.set)) + "</span><span>" + (c.polar ? (c.polar === "day" ? "24 h" : "0 h") : dur(len).replace(" min", "m").replace(" h ", "h ")) + "</span>";
+    b.onclick = () => { date = ds; render(); window.scrollTo({top: 0, behavior: "smooth"}); };
+    li.appendChild(b); list.appendChild(li);
+  }
+}
+
+/* ---------- controls ---------- */
+function setLoc(l) {
+  loc = l;
+  try { localStorage.setItem("daylight-loc", JSON.stringify(l)); } catch(e){}
+  $("lat").value = l.lat; $("lon").value = l.lon;
+  const i = CITIES.findIndex(c => c.name === l.name);
+  $("city").value = i >= 0 ? String(i) : "custom";
+  if (date === "") date = todayIn(loc.tz);
+  render();
+}
+$("city").innerHTML = CITIES.map((c, i) => `<option value="${i}">${c.name}</option>`).join("") + '<option value="custom">Custom place</option>';
+$("city").onchange = e => { if (e.target.value !== "custom") setLoc(CITIES[+e.target.value]); };
+$("time").oninput = () => cur && !cur.polar && updateSky();
+$("prev").onclick = () => { date = shift(date, -1); render(); };
+$("next").onclick = () => { date = shift(date, 1); render(); };
+$("today").onclick = () => { date = todayIn(loc.tz); render(); };
+$("date").onchange = e => { if (e.target.value) { date = e.target.value; render(); } };
+$("apply").onclick = () => {
+  const lat = parseFloat($("lat").value), lon = parseFloat($("lon").value);
+  if (!(lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)) { $("lat").setCustomValidity("Enter a latitude from -90 to 90 and a longitude from -180 to 180."); $("lat").reportValidity(); $("lat").setCustomValidity(""); return; }
+  setLoc({name: lat.toFixed(2) + "°, " + lon.toFixed(2) + "°", lat, lon, tz: localTz});
+};
+$("geo").onclick = () => {
+  const btn = $("geo");
+  if (!navigator.geolocation) { btn.textContent = "Location not available"; return; }
+  btn.textContent = "Locating…";
+  navigator.geolocation.getCurrentPosition(
+    p => { btn.textContent = "Use my location"; setLoc({name: "My location", lat: p.coords.latitude, lon: p.coords.longitude, tz: localTz}); },
+    () => { btn.textContent = "Location blocked. Pick a city instead."; },
+    {timeout: 10000}
+  );
+};
+setLoc(loc);
+</script>
+</body>
+</html>
