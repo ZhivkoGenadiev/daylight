@@ -3,7 +3,7 @@
 
 A beautiful, clean, and fast web application to check solar phases—sunrise, sunset, day length, and solar noon—for any date and any location on Earth.
 
-🌐 **[View Live Demo](#)** [https://zhivkogenadiev.github.io/daylight.html/](https://zhivkogenadiev.github.io/daylight/)
+🌐 **[View Live Demo](#)** [https://zhivkogenadiev.github.io/daylight/](https://zhivkogenadiev.github.io/daylight.html/)
 
 ---
 
