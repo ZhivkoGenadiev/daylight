@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Daylight – sunrise and sunset for every day</title>
+<title>Ден – изгрев и залез за всеки ден</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -50,14 +50,14 @@ details input{width:140px}
 .facts dt{color:var(--mute);font-size:.9rem}
 .facts dd{margin:2px 0 0;font:600 1.25rem var(--serif)}
 ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-ol button{width:100%;display:grid;grid-template-columns:96px 1fr 70px 70px 74px;gap:10px;align-items:center;text-align:left;padding:10px 14px;font-variant-numeric:tabular-nums}
+ol button{width:100%;display:grid;grid-template-columns:110px 1fr 70px 70px 74px;gap:10px;align-items:center;text-align:left;padding:10px 14px;font-variant-numeric:tabular-nums}
 ol button[aria-current=true]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
 .bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--dusk))}
-.hd{display:grid;grid-template-columns:96px 1fr 70px 70px 74px;gap:10px;padding:0 14px;color:var(--mute);font-size:.85rem;margin-bottom:6px}
+.hd{display:grid;grid-template-columns:110px 1fr 70px 70px 74px;gap:10px;padding:0 14px;color:var(--mute);font-size:.85rem;margin-bottom:6px}
 @media (max-width:620px){
   .times{grid-template-columns:1fr}
-  ol button,.hd{grid-template-columns:70px 1fr 56px 56px}
+  ol button,.hd{grid-template-columns:80px 1fr 56px 56px}
   ol button>:nth-child(5),.hd>:nth-child(5){display:none}
 }
 .note{color:var(--mute);font-size:.85rem;margin-top:28px}
@@ -65,67 +65,65 @@ ol button[aria-current=true]{border-color:var(--gold);box-shadow:inset 0 0 0 1px
 </head>
 <body>
 <main>
-  <h1>Daylight</h1>
-  <p class="sub" id="where">Sunrise and sunset for any day, anywhere.</p>
+  <h1>Продължителност на деня</h1>
+  <p class="sub" id="where">Изгрев и залез за всеки ден, навсякъде.</p>
 
   <div class="controls">
-    <select id="city" aria-label="Choose a city"></select>
-    <button id="geo" class="primary">Use my location</button>
+    <select id="city" aria-label="Изберете град"></select>
+    <button id="geo" class="primary">Моето местоположение</button>
     <div class="date">
-      <button id="prev" aria-label="Previous day">‹</button>
-      <input type="date" id="date" aria-label="Date">
-      <button id="next" aria-label="Next day">›</button>
-      <button id="today">Today</button>
+      <button id="prev" aria-label="Предишен ден">‹</button>
+      <input type="date" id="date" aria-label="Дата">
+      <button id="next" aria-label="Следващ ден">›</button>
+      <button id="today">Днес</button>
     </div>
     <details>
-      <summary>Enter coordinates</summary>
+      <summary>Въведете координати</summary>
       <div>
-        <label>Latitude<input id="lat" type="number" step="any" min="-90" max="90" placeholder="42.70"></label>
-        <label>Longitude<input id="lon" type="number" step="any" min="-180" max="180" placeholder="23.32"></label>
-        <button id="apply">Apply</button>
+        <label>Географска ширина<input id="lat" type="number" step="any" min="-90" max="90" placeholder="42.70"></label>
+        <label>Географска дължина<input id="lon" type="number" step="any" min="-180" max="180" placeholder="23.32"></label>
+        <button id="apply">Приложи</button>
       </div>
     </details>
   </div>
 
-  <section class="sky" aria-label="Path of the sun">
+  <section class="sky" aria-label="Път на слънцето">
     <div id="skybox"></div>
     <div class="scrub" id="scrub">
-      <input type="range" id="time" aria-label="Time of day">
+      <input type="range" id="time" aria-label="Време от денонощието">
       <div class="read" id="read"></div>
     </div>
   </section>
 
   <section class="times" aria-live="polite">
-    <div class="big rise"><span>Sunrise</span><b id="rise">–</b></div>
-    <div class="big set"><span>Sunset</span><b id="set">–</b></div>
+    <div class="big rise"><span>Изгрев</span><b id="rise">–</b></div>
+    <div class="big set"><span>Залез</span><b id="set">–</b></div>
   </section>
 
   <dl class="facts">
-    <div><dt>Day length</dt><dd id="len">–</dd></div>
-    <div><dt>Compared to yesterday</dt><dd id="delta">–</dd></div>
-    <div><dt>Solar noon</dt><dd id="noon">–</dd></div>
-    <div><dt>First light</dt><dd id="dawn">–</dd></div>
-    <div><dt>Last light</dt><dd id="dusk">–</dd></div>
+    <div><dt>Продължителност на деня</dt><dd id="len">–</dd></div>
+    <div><dt>Спрямо вчера</dt><dd id="delta">–</dd></div>
+    <div><dt>Слънчев пладне</dt><dd id="noon">–</dd></div>
+    <div><dt>Първа светлина</dt><dd id="dawn">–</dd></div>
+    <div><dt>Последна светлина</dt><dd id="dusk">–</dd></div>
   </dl>
 
-  <h2>Next 14 days</h2>
-  <div class="hd" aria-hidden="true"><span>Date</span><span>Daylight</span><span>Sunrise</span><span>Sunset</span><span>Length</span></div>
+  <h2>Следващи 14 дни</h2>
+  <div class="hd" aria-hidden="true"><span>Дата</span><span>Ден</span><span>Изгрев</span><span>Залез</span><span>Продълж.</span></div>
   <ol id="list"></ol>
 
-  <p class="note">Times come from the NOAA solar equations and are accurate to within about a minute. They are shown in the selected place's time zone. First and last light mark when the sun is 6° below the horizon.</p>
+  <p class="note">Часовете са изчислени по слънчевите уравнения на NOAA с точност до около минута. Показани са в часовата зона на избраното място. Първата и последната светлина отбелязват моментите, когато слънцето е на 6° под хоризонта.</p>
 </main>
 
 <script>
 const R = Math.PI / 180;
 const CITIES = [
-  {name:"Sofia, Bulgaria", lat:42.6977, lon:23.3219, tz:"Europe/Sofia"},
-  {name:"London, UK", lat:51.5072, lon:-0.1276, tz:"Europe/London"},
-  {name:"New York, USA", lat:40.7128, lon:-74.006, tz:"America/New_York"},
-  {name:"São Paulo, Brazil", lat:-23.5505, lon:-46.6333, tz:"America/Sao_Paulo"},
-  {name:"Cairo, Egypt", lat:30.0444, lon:31.2357, tz:"Africa/Cairo"},
-  {name:"Tokyo, Japan", lat:35.6762, lon:139.6503, tz:"Asia/Tokyo"},
-  {name:"Sydney, Australia", lat:-33.8688, lon:151.2093, tz:"Australia/Sydney"},
-  {name:"Reykjavík, Iceland", lat:64.1466, lon:-21.9426, tz:"Atlantic/Reykjavik"}
+  {name:"София, България", lat:42.6977, lon:23.3219, tz:"Europe/Sofia"},
+  {name:"Пазарджик, България", lat:42.1929, lon:24.3339, tz:"Europe/Sofia"},
+  {name:"Пловдив, България", lat:42.1354, lon:24.7453, tz:"Europe/Sofia"},
+  {name:"Лондон, Великобритания", lat:51.5072, lon:-0.1276, tz:"Europe/London"},
+  {name:"Ню Йорк, САЩ", lat:40.7128, lon:-74.006, tz:"America/New_York"},
+  {name:"Токио, Япония", lat:35.6762, lon:139.6503, tz:"Asia/Tokyo"}
 ];
 const $ = id => document.getElementById(id);
 const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
@@ -133,7 +131,6 @@ let loc = CITIES[0], date = "", cur = null;
 
 try { const s = JSON.parse(localStorage.getItem("daylight-loc")); if (s && isFinite(s.lat) && isFinite(s.lon)) loc = s; } catch(e){}
 
-/* ---------- solar maths (NOAA / sunrise equation) ---------- */
 function sun(y, m, d, lat, lon, h) {
   const n = Math.round(Date.UTC(y, m, d, 12) / 864e5 + 2440587.5 - 2451545 + 0.0008);
   const Js = n - lon / 360;
@@ -158,17 +155,15 @@ function calc(ds) {
 function shift(ds, n) { const [y,m,d] = parts(ds); return new Date(Date.UTC(y, m-1, d + n)).toISOString().slice(0,10); }
 function todayIn(tz) { return new Intl.DateTimeFormat("en-CA", {timeZone: tz}).format(new Date()); }
 
-/* ---------- formatting ---------- */
-const tf = () => new Intl.DateTimeFormat([], {hour:"2-digit", minute:"2-digit", timeZone: loc.tz});
+const tf = () => new Intl.DateTimeFormat('bg-BG', {hour:"2-digit", minute:"2-digit", timeZone: loc.tz});
 const time = ms => ms == null || isNaN(ms) ? "–" : tf().format(new Date(ms));
-const dur = ms => { const m = Math.round(ms / 6e4); return Math.floor(m/60) + " h " + String(m%60).padStart(2,"0") + " min"; };
+const dur = ms => { const m = Math.round(ms / 6e4); return Math.floor(m/60) + " ч " + String(m%60).padStart(2,"0") + " мин"; };
 function deltaTxt(sec) {
   const s = Math.abs(Math.round(sec)), mm = Math.floor(s/60), ss = s%60;
-  if (s < 1) return "No change";
-  return (sec > 0 ? "+" : "−") + (mm ? mm + " min " : "") + ss + " s";
+  if (s < 1) return "Без промяна";
+  return (sec > 0 ? "+" : "−") + (mm ? mm + " мин " : "") + ss + " сек";
 }
 
-/* ---------- sky ---------- */
 const STOPS = [
   [-0.2, "#0f1030", "#2a2358"], [0, "#3a3470", "#f2a65a"], [0.12, "#4f7fc8", "#ffd9a0"],
   [0.5, "#2f6fc0", "#8cc3ee"], [0.88, "#4f6cb8", "#ffc58a"], [1, "#46306f", "#ee7b4d"], [1.2, "#0f1030", "#2a2358"]
@@ -182,7 +177,7 @@ function skyAt(p) {
   }
   return [STOPS.at(-1)[1], STOPS.at(-1)[2]];
 }
-const SVG = `<svg viewBox="0 0 600 300" role="img" aria-label="Arc showing the sun's path across the sky">
+const SVG = `<svg viewBox="0 0 600 300" role="img" aria-label="Път на слънцето по небето">
 <defs>
  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="s1" offset="0"/><stop id="s2" offset="1"/></linearGradient>
  <radialGradient id="glow"><stop offset="0" stop-color="#fff3c4" stop-opacity=".95"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
@@ -205,20 +200,19 @@ function updateSky() {
   const [a, b] = skyAt(p);
   $("s1").setAttribute("stop-color", a); $("s2").setAttribute("stop-color", b);
   $("halo").setAttribute("opacity", p < 0 || p > 1 ? 0.2 : 1);
-  $("read").textContent = time(v) + (p < 0 || p > 1 ? " · the sun is below the horizon" : " · the sun is up");
+  $("read").textContent = time(v) + (p < 0 || p > 1 ? " · слънцето е под хоризонта" : " · слънцето е над хоризонта");
 }
 
-/* ---------- render ---------- */
 function render() {
   cur = calc(date);
   $("date").value = date;
-  $("where").textContent = loc.name + " · " + new Intl.DateTimeFormat([], {dateStyle:"full", timeZone:"UTC"}).format(new Date(date + "T12:00:00Z"));
+  $("where").textContent = loc.name + " · " + new Intl.DateTimeFormat('bg-BG', {dateStyle:"full", timeZone:"UTC"}).format(new Date(date + "T12:00:00Z"));
   const polar = cur.polar;
   if (polar) {
-    $("skybox").innerHTML = '<div class="msg">' + (polar === "day" ? "The sun does not set on this day. It is polar day here." : "The sun does not rise on this day. It is polar night here.") + "</div>";
+    $("skybox").innerHTML = '<div class="msg">' + (polar === "day" ? "Слънцето не залязва на тази дата." : "Слънцето не изгрява на тази дата.") + "</div>";
     $("scrub").style.display = "none";
     for (const id of ["rise","set","len","dawn","dusk"]) $(id).textContent = "–";
-    $("rise").textContent = $("set").textContent = polar === "day" ? "No sunset" : "No sunrise";
+    $("rise").textContent = $("set").textContent = polar === "day" ? "Няма залез" : "Няма изгрев";
     $("noon").textContent = time(cur.noon); $("delta").textContent = "–";
   } else {
     $("skybox").innerHTML = SVG;
@@ -240,17 +234,16 @@ function render() {
   const list = $("list"); list.innerHTML = "";
   for (let i = 0; i < 14; i++) {
     const ds = shift(date, i), c = calc(ds), li = document.createElement("li"), b = document.createElement("button");
-    const label = new Intl.DateTimeFormat([], {weekday:"short", day:"numeric", month:"short", timeZone:"UTC"}).format(new Date(ds + "T12:00:00Z"));
+    const label = new Intl.DateTimeFormat('bg-BG', {weekday:"short", day:"numeric", month:"short", timeZone:"UTC"}).format(new Date(ds + "T12:00:00Z"));
     const len = c.polar ? (c.polar === "day" ? 864e5 : 0) : c.set - c.rise;
     b.setAttribute("aria-current", i === 0);
     b.innerHTML = "<span>" + label + '</span><span class="bar"><i style="width:' + (len / 864e5 * 100).toFixed(1) + '%"></i></span><span>' +
-      (c.polar ? "–" : time(c.rise)) + "</span><span>" + (c.polar ? "–" : time(c.set)) + "</span><span>" + (c.polar ? (c.polar === "day" ? "24 h" : "0 h") : dur(len).replace(" min", "m").replace(" h ", "h ")) + "</span>";
+      (c.polar ? "–" : time(c.rise)) + "</span><span>" + (c.polar ? "–" : time(c.set)) + "</span><span>" + (c.polar ? (c.polar === "day" ? "24 ч" : "0 ч") : dur(len).replace(" мин", "м").replace(" ч ", "ч ")) + "</span>";
     b.onclick = () => { date = ds; render(); window.scrollTo({top: 0, behavior: "smooth"}); };
     li.appendChild(b); list.appendChild(li);
   }
 }
 
-/* ---------- controls ---------- */
 function setLoc(l) {
   loc = l;
   try { localStorage.setItem("daylight-loc", JSON.stringify(l)); } catch(e){}
@@ -260,7 +253,7 @@ function setLoc(l) {
   if (date === "") date = todayIn(loc.tz);
   render();
 }
-$("city").innerHTML = CITIES.map((c, i) => `<option value="${i}">${c.name}</option>`).join("") + '<option value="custom">Custom place</option>';
+$("city").innerHTML = CITIES.map((c, i) => `<option value="${i}">${c.name}</option>`).join("") + '<option value="custom">Друго място</option>';
 $("city").onchange = e => { if (e.target.value !== "custom") setLoc(CITIES[+e.target.value]); };
 $("time").oninput = () => cur && !cur.polar && updateSky();
 $("prev").onclick = () => { date = shift(date, -1); render(); };
@@ -269,16 +262,16 @@ $("today").onclick = () => { date = todayIn(loc.tz); render(); };
 $("date").onchange = e => { if (e.target.value) { date = e.target.value; render(); } };
 $("apply").onclick = () => {
   const lat = parseFloat($("lat").value), lon = parseFloat($("lon").value);
-  if (!(lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)) { $("lat").setCustomValidity("Enter a latitude from -90 to 90 and a longitude from -180 to 180."); $("lat").reportValidity(); $("lat").setCustomValidity(""); return; }
+  if (!(lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)) { $("lat").setCustomValidity("Въведете ширина от -90 до 90 и дължина от -180 до 180."); $("lat").reportValidity(); $("lat").setCustomValidity(""); return; }
   setLoc({name: lat.toFixed(2) + "°, " + lon.toFixed(2) + "°", lat, lon, tz: localTz});
 };
 $("geo").onclick = () => {
   const btn = $("geo");
-  if (!navigator.geolocation) { btn.textContent = "Location not available"; return; }
-  btn.textContent = "Locating…";
+  if (!navigator.geolocation) { btn.textContent = "Местоположението е недостъпно"; return; }
+  btn.textContent = "Локализиране…";
   navigator.geolocation.getCurrentPosition(
-    p => { btn.textContent = "Use my location"; setLoc({name: "My location", lat: p.coords.latitude, lon: p.coords.longitude, tz: localTz}); },
-    () => { btn.textContent = "Location blocked. Pick a city instead."; },
+    p => { btn.textContent = "Моето местоположение"; setLoc({name: "Моето местоположение", lat: p.coords.latitude, lon: p.coords.longitude, tz: localTz}); },
+    () => { btn.textContent = "Достъпът е блокиран. Изберете град."; },
     {timeout: 10000}
   );
 };
