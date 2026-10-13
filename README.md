@@ -37,7 +37,7 @@ A beautiful, clean, and fast web application to check solar phases—sunrise, su
 
 ## 🚀 How to Run Locally
 
-The project is lightweight and contained within a single main file (`index.html`). No Node.js installation or package manager is required.
+The project is lightweight and contained within a single main file (`daylight.html`). No Node.js installation or package manager is required.
 
 1. Clone the repository or download the files:
    ```bash
